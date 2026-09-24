@@ -13,21 +13,21 @@ pipeline {
         stage('checkout') {
             steps {
                  script{
-                        dir("terraform")
-                        {
+                        dir("terraform"){
+                         git branch: 'main',
                             git "https://github.com/Dhananjayraje-25/Terraform-Jenkins.git"
                         }
                     }
                 }
             }
-
+    
         stage('Plan') {
-            steps {
-                sh 'pwd;cd terraform/ ; terraform init'
-                sh "pwd;cd terraform/ ; terraform plan -out tfplan"
-                sh 'pwd;cd terraform/ ; terraform show -no-color tfplan > tfplan.txt'
-            }
-        }
+        steps {
+              bat 'cd terraform && terraform init'
+              bat 'cd terraform && terraform plan -out tfplan'
+              bat 'cd terraform && terraform show -no-color tfplan > tfplan.txt'
+    }
+}
         stage('Approval') {
            when {
                not {
@@ -44,11 +44,11 @@ pipeline {
            }
        }
 
-        stage('Apply') {
-            steps {
-                sh "pwd;cd terraform/ ; terraform apply -input=false tfplan"
-            }
-        }
+       stage('Apply') {
+    steps {
+        bat 'cd terraform && terraform apply -input=false tfplan'
+    }
+}
     }
 
   }
