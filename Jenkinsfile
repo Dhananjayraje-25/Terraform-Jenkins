@@ -28,6 +28,15 @@ pipeline {
             }
         }
 
+        stage('Check Terraform') {
+    steps {
+        bat '''
+            echo Checking Terraform...
+            where terraform
+            terraform --version
+        '''
+    }
+}
         stage('Terraform Init') {
             steps {
                 bat '''
